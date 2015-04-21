@@ -1,0 +1,97 @@
+package rabun.oanda.rest.endpoints;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import rabun.oanda.rest.base.Endpoint;
+import rabun.oanda.rest.models.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class TransactionEndpoints extends Endpoint {
+
+    private final String transactionsRoute = "/v1/accounts/{account_id}/transactions";
+
+    public TransactionEndpoints(String key, AccountType accountType) {
+        super(key, accountType);
+    }
+
+    public List<Transaction> GetTransactions(int accountId, Integer maxId, Integer minId, Integer count,
+                                             String instrument, String ids) throws UnirestException {
+
+        String endpoint = makeEndpoint(accountType, transactionsRoute);
+
+        Map<String, String> routeParams = new HashMap<>();
+        routeParams.put("account_id", String.valueOf(accountId));
+
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("maxId", maxId);
+        fields.put("minId", minId);
+        fields.put("count", count);
+        fields.put("instrument", instrument);
+        fields.put("ids", ids);
+
+        HttpResponse<JsonNode> response = this.Get(routeParams, fields, endpoint);
+        return fillTransaction(response);
+    }
+
+    private List<Transaction> fillTransaction(HttpResponse<JsonNode> response) {
+        JSONObject object = response.getBody().getObject();
+        JSONArray array = object.getJSONArray("transactions");
+
+        List<Transaction> transactions = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject obj = array.getJSONObject(i);
+            OandaTypes.TransactionType transactionType = OandaTypes.TransactionType.valueOf(obj.getString("type"));
+
+            switch (transactionType) {
+                case MARKET_ORDER_CREATE: {
+                    TransactionMarketOrderCreate transaction = new TransactionMarketOrderCreate();
+                    transaction.id = obj.getInt("id");
+                    transaction.accountId = obj.getInt("accountId");
+                    transaction.time = obj.getString("time");
+                    transaction.type = transactionType;
+                    transaction.instrument = obj.getString("instrument");
+                    transaction.units = obj.getInt("units");
+                    transaction.side = OandaTypes.Side.valueOf(obj.getString("side"));
+                    transaction.price = (float) obj.getDouble("price");
+                    transaction.pl = obj.getInt("pl");
+                    transaction.interest = (float) obj.getDouble("interest");
+                    transaction.accountBalance = (float) obj.getDouble("accountBalance");
+
+                    JSONObject toj = obj.getJSONObject("tradeOpened");
+                    transaction.tradeOpened = new TradeOpened();
+                    transaction.tradeOpened.id = toj.getInt("id");
+                    transaction.tradeOpened.units = toj.getInt("units");
+
+                    transactions.add(transaction);
+                }
+
+                case STOP_ORDER_CREATE: {
+                    TransactionStopOrderCreate transaction = new TransactionStopOrderCreate();
+                    transaction.id = obj.getInt("id");
+                    transaction.accountId = obj.getInt("accountId");
+                    transaction.time = obj.getString("time");
+                    transaction.type = transactionType;
+                    transaction.instrument = obj.getString("instrument");
+                    transaction.units = obj.getInt("units");
+                    transaction.side = OandaTypes.Side.valueOf(obj.getString("side"));
+                    transaction.price = (float) obj.getDouble("price");
+                    transaction.expiry = obj.getInt("expiry");
+                    transaction.reason = OandaTypes.Reason.valueOf(obj.getString("reason"));
+
+                    transactions.add(transaction);
+                }
+            }
+        }
+
+        return transactions;
+    }
+
+
+}
