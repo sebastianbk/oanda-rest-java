@@ -4,11 +4,15 @@ package rabun.oanda.rest.endpoints;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.joda.time.DateTime;
 import rabun.oanda.rest.base.Endpoint;
 import rabun.oanda.rest.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class OrderEndpoints extends Endpoint {
@@ -73,7 +77,7 @@ public class OrderEndpoints extends Endpoint {
     }
 
     public Order CreateOrder(int accountId, String instrument, int units, OandaTypes.Side side, OandaTypes.OrderType type,
-                             Date expiry, Float price, Float lowerBound, Float upperBound,
+                             DateTime expiry, Float price, Float lowerBound, Float upperBound,
                              Integer takeProfit, Integer trailingStop) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, ordersRoute);
@@ -86,7 +90,9 @@ public class OrderEndpoints extends Endpoint {
         fields.put("type", type.toString());
 
         if (type != OandaTypes.OrderType.market) {
-            fields.put("expiry", expiry);
+            String dateString = expiry.toString();
+
+            fields.put("expiry", dateString);
             fields.put("price", price);
         }
 
@@ -101,7 +107,7 @@ public class OrderEndpoints extends Endpoint {
 
         Map<String, String> routeParams = new HashMap<>();
         routeParams.put("account_id", String.valueOf(accountId));
-        HttpResponse<JsonNode> jsonResponse = this.Get(routeParams, fields, endpoint);
+        HttpResponse<JsonNode> jsonResponse = this.Post(routeParams,fields,endpoint);
 
         return fillOrder(jsonResponse);
     }
@@ -219,8 +225,7 @@ public class OrderEndpoints extends Endpoint {
 
         JSONObject jsonResult = jsonResponse.getBody().getObject();
 
-        if (jsonResult.has("tradeOpened") || (jsonResult.has("type")
-                && OandaTypes.OrderType.valueOf(jsonResult.getString("type")) == OandaTypes.OrderType.market)) {
+        if (jsonResult.has("tradeOpened")) {
             JSONObject oj = jsonResult.getJSONObject("tradeOpened");
 
             OrderMarket order = new OrderMarket();
@@ -228,12 +233,13 @@ public class OrderEndpoints extends Endpoint {
             order.instrument = jsonResult.getString("instrument");
             order.price = (float) jsonResult.getDouble("price");
             order.time = jsonResult.getString("time");
-            order.id = oj.getInt("Id");
+            order.id = oj.getInt("id");
             order.side = OandaTypes.Side.valueOf(oj.getString("side"));
             order.stopLoss = (float) oj.getDouble("stopLoss");
             order.takeProfit = (float) oj.getDouble("takeProfit");
             order.trailingStop = (float) oj.getDouble("trailingStop");
             order.units = oj.getInt("units");
+            order.type = OandaTypes.OrderType.market;
 
             return order;
         } else {
@@ -244,7 +250,7 @@ public class OrderEndpoints extends Endpoint {
             order.instrument = jsonResult.getString("instrument");
             order.price = (float) jsonResult.getDouble("price");
             order.time = jsonResult.getString("time");
-            order.id = oj.getInt("Id");
+            order.id = oj.getInt("id");
             order.side = OandaTypes.Side.valueOf(oj.getString("side"));
             order.stopLoss = (float) oj.getDouble("stopLoss");
             order.takeProfit = (float) oj.getDouble("takeProfit");
@@ -253,6 +259,7 @@ public class OrderEndpoints extends Endpoint {
             order.expiry = oj.getString("expiry");
             order.lowerBound = oj.getInt("lowerBound");
             order.upperBound = oj.getInt("lowerBound");
+            order.type = OandaTypes.OrderType.marketIfTouched;
 
             return order;
         }
