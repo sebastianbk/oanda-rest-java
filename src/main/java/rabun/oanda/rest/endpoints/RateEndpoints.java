@@ -4,6 +4,7 @@ package rabun.oanda.rest.endpoints;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.joda.time.DateTime;
 import rabun.oanda.rest.base.Endpoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -95,8 +96,8 @@ public class RateEndpoints extends Endpoint {
 
     }
 
-    public Candle GetCandles(String instrument, GranularityType granularity, int count, Date start, Date end,
-                             CandleFormat candleFormat, boolean includeFirst, byte dailyAlignment,
+    public Candle GetCandles(String instrument, GranularityType granularity, int count, DateTime start, DateTime end,
+                             CandleFormat candleFormat, Boolean includeFirst, Byte dailyAlignment,
                              WeeklyAlignment weeklyAlignment) throws Exception {
 
         Candle candle = new Candle();
@@ -237,7 +238,7 @@ public class RateEndpoints extends Endpoint {
 
     }
 
-    private Map<String, Object> makeCandle(String instrument, GranularityType granularity, Integer count, Date start, Date end,
+    private Map<String, Object> makeCandle(String instrument, GranularityType granularity, Integer count, DateTime start, DateTime end,
                                            CandleFormat candleFormat, Boolean includeFirst, Byte dailyAlignment,
                                            WeeklyAlignment weeklyAlignment) throws Exception {
 
@@ -257,17 +258,16 @@ public class RateEndpoints extends Endpoint {
         fields.put("count", count);
 
         if (start != null) {
-            fields.put("start", start.getTime());
+            fields.put("start", start.toString());
         }
 
         if (start != null && end != null) {
-            fields.put("start", start.getTime());
-            fields.put("end", end.getTime());
+            fields.put("start", start.toString());
+            fields.put("end", end.toString());
         }
 
-        if (candleFormat == null)
-            throw new Exception("candleFormat does not be null");
-        fields.put("candleFormat", candleFormat.toString());
+        if (candleFormat != null)
+            fields.put("candleFormat", candleFormat.toString());
 
         if (includeFirst == null)
             includeFirst = true;
