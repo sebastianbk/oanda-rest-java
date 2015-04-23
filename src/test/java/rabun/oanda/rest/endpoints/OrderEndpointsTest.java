@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class OrderEndpointsTest {
 
     public String key;
-    public OrderEndpoints orderEndpoints;
     public int accountId;
+    public OrderEndpoints orderEndpoints;
 
     @Before
     public void Init() {

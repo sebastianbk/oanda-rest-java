@@ -41,6 +41,10 @@ public class TradeEndpoints extends Endpoint {
 
         HttpResponse<JsonNode> response = this.Get(routeParams, fields, endpoint);
 
+        if (response.getCode() != 200) {
+            throw new UnirestException(response.getBody().toString());
+        }
+
         return fillTrades(response);
     }
 
@@ -53,6 +57,10 @@ public class TradeEndpoints extends Endpoint {
         routeParams.put("trade_id", String.valueOf(tradeId));
 
         HttpResponse<JsonNode> response = this.Get(routeParams, null, endpoint);
+
+        if (response.getCode() != 200) {
+            throw new UnirestException(response.getBody().toString());
+        }
 
         return fillTrade(response);
     }
@@ -71,6 +79,10 @@ public class TradeEndpoints extends Endpoint {
 
         HttpResponse<JsonNode> response = this.Patch(routeParams,fields, endpoint);
 
+        if (response.getCode() != 200) {
+            throw new UnirestException(response.getBody().toString());
+        }
+
         return fillTrade(response);
     }
 
@@ -83,6 +95,10 @@ public class TradeEndpoints extends Endpoint {
         routeParams.put("trade_id", String.valueOf(tradeId));
 
         HttpResponse<JsonNode> response = this.Delete(routeParams, endpoint);
+
+        if (response.getCode() != 200) {
+            throw new UnirestException(response.getBody().toString());
+        }
 
         return fillTradeClosed(response);
     }
