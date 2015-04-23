@@ -2,6 +2,7 @@ package rabun.oanda.rest.endpoints;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import rabun.oanda.rest.base.Endpoint;
@@ -25,7 +26,20 @@ public class OrderEndpointsTest {
     }
 
     @Test
+    public void testCreateOrderMarketIfTouched() throws Exception {
+        DateTime d = new DateTime(1429804625000L, DateTimeZone.UTC);
+        OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
+
+        assertNotNull(order);
+    }
+
+    @Test
     public void testGetOrders() throws Exception {
+        DateTime d = new DateTime(1429804625000L, DateTimeZone.UTC);
+        OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
+
+        assertNotNull(order);
+
         List<Order> orders = orderEndpoints.GetOrders(accountId, null, null, "EUR_USD", null);
         assertNotNull(orders);
         assertTrue(orders.size() >= 0);
@@ -33,34 +47,46 @@ public class OrderEndpointsTest {
 
     @Test
     public void testGetOrders1() throws Exception {
+        DateTime d = new DateTime(1429804625000L, DateTimeZone.UTC);
+        OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
+
+        assertNotNull(order);
+
         List<Order> orders = orderEndpoints.GetOrders(accountId);
         assertNotNull(orders);
         assertTrue(orders.size() >= 0);
     }
 
     @Test
-    public void testCreateOrderMarketIfTouched() throws Exception {
-        DateTime d = new DateTime(1429696889000L, DateTimeZone.UTC);
+    public void testGetOrder() throws Exception {
+        DateTime d = new DateTime(1429804625000L, DateTimeZone.UTC);
         OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
 
         assertNotNull(order);
-    }
 
-    @Test
-    public void testGetOrder() throws Exception {
-        Order order = orderEndpoints.GetOrder(accountId, 111);
-        assertNotNull(order);
+        Order o = orderEndpoints.GetOrder(accountId, order.id);
+        assertNotNull(o);
     }
 
     @Test
     public void testUpdateOrder() throws Exception {
-        DateTime d = new DateTime(1429696889000L, DateTimeZone.UTC);
-        Order upOrder = orderEndpoints.UpdateOrder(accountId, 111, 200, 1.12f, d, 1.06f, 1.19f, null, null, null);
+        DateTime d = new DateTime(1429804625000L, DateTimeZone.UTC);
+        OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
+
+
+        Order upOrder = orderEndpoints.UpdateOrder(accountId, order.id, 200, 1.12f, null, null, null, null, null, null);
         assertNotNull(upOrder);
     }
 
     @Test
+    @After
     public void testCloseOrder() throws Exception {
-        OrderClosed order = orderEndpoints.CloseOrder(accountId,111);
+        List<Order> orders = orderEndpoints.GetOrders(accountId);
+
+        for (Order order : orders) {
+            Order o = orderEndpoints.CloseOrder(accountId, order.id);
+            assertNotNull(o);
+        }
+
     }
 }

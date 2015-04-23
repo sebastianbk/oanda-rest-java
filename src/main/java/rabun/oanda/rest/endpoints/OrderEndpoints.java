@@ -10,9 +10,6 @@ import rabun.oanda.rest.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class OrderEndpoints extends Endpoint {
@@ -48,9 +45,8 @@ public class OrderEndpoints extends Endpoint {
         HttpResponse<JsonNode> jsonResponse = this.Get(routeParams, fields, endpoint);
 
 
-        if (jsonResponse.getCode() != 200) {
+        if (jsonResponse.getCode() > 299 || jsonResponse.getCode() < 200)
             throw new UnirestException(jsonResponse.getBody().toString());
-        }
 
         fillOrders(orders, jsonResponse);
 
@@ -66,9 +62,8 @@ public class OrderEndpoints extends Endpoint {
         routeParams.put("account_id", String.valueOf(accountId));
         HttpResponse<JsonNode> jsonResponse = this.Get(routeParams, null, endpoint);
 
-        if (jsonResponse.getCode() != 200) {
+        if (jsonResponse.getCode() > 299 || jsonResponse.getCode() < 200)
             throw new UnirestException(jsonResponse.getBody().toString());
-        }
 
         fillOrders(orders, jsonResponse);
 
@@ -109,7 +104,10 @@ public class OrderEndpoints extends Endpoint {
         routeParams.put("account_id", String.valueOf(accountId));
         HttpResponse<JsonNode> jsonResponse = this.Post(routeParams,fields,endpoint);
 
-        return fillOrder(jsonResponse);
+        if (jsonResponse.getCode() > 299 || jsonResponse.getCode() < 200)
+            throw new UnirestException(jsonResponse.getBody().toString());
+
+        return fillCreateOrder(jsonResponse);
     }
 
     public Order GetOrder(int accountId, int orderId) throws UnirestException {
@@ -120,9 +118,12 @@ public class OrderEndpoints extends Endpoint {
         routeParams.put("account_id", String.valueOf(accountId));
         routeParams.put("order_id", String.valueOf(orderId));
 
-        HttpResponse<JsonNode> response = this.Get(routeParams, null, endpoint);
+        HttpResponse<JsonNode> jsonResponse = this.Get(routeParams, null, endpoint);
 
-        return fillOrder(response);
+        if (jsonResponse.getCode() > 299 || jsonResponse.getCode() < 200)
+            throw new UnirestException(jsonResponse.getBody().toString());
+
+        return fillOrder(jsonResponse);
     }
 
     public Order UpdateOrder(int accountId, int orderId, Integer units, Float price, DateTime expiry,
@@ -154,21 +155,27 @@ public class OrderEndpoints extends Endpoint {
         if (trailingStop != null)
             fields.put("trailingStop", trailingStop);
 
-        HttpResponse<JsonNode> response = this.Get(routeParams, fields, endpoint);
+        HttpResponse<JsonNode> jsonResponse = this.Patch(routeParams, fields, endpoint);
 
-        return this.fillOrder(response);
+        if (jsonResponse.getCode() > 299 || jsonResponse.getCode() < 200)
+            throw new UnirestException(jsonResponse.getBody().toString());
+
+        return this.fillOrder(jsonResponse);
     }
 
-    public OrderClosed CloseOrder(int accountId, int orderId) throws UnirestException {
+    public Order CloseOrder(int accountId, int orderId) throws UnirestException {
         String endpoint = makeEndpoint(accountType, orderRoute);
 
         Map<String, String> routeParams = new HashMap<>();
         routeParams.put("account_id", String.valueOf(accountId));
         routeParams.put("order_id", String.valueOf(orderId));
 
-        HttpResponse<JsonNode> response = this.Delete(routeParams, endpoint);
+        HttpResponse<JsonNode> jsonResponse = this.Delete(routeParams, endpoint);
 
-        return fillOrderClosed(response);
+        if (jsonResponse.getCode() > 299 || jsonResponse.getCode() < 200)
+            throw new UnirestException(jsonResponse.getBody().toString());
+
+        return fillOrderClosed(jsonResponse);
 
     }
 
@@ -221,54 +228,100 @@ public class OrderEndpoints extends Endpoint {
         }
     }
 
-    private Order fillOrder(HttpResponse<JsonNode> jsonResponse) {
+    private Order fillCreateOrder(HttpResponse<JsonNode> jsonResponse) {
 
         JSONObject jsonResult = jsonResponse.getBody().getObject();
 
         if (jsonResult.has("tradeOpened")) {
-            JSONObject oj = jsonResult.getJSONObject("tradeOpened");
+
+            JSONObject object = jsonResult.getJSONObject("tradeOpened");
+
+            OrderMarket order = new OrderMarket();
+
+            order.id = object.getInt("id");
+            order.instrument = jsonResult.getString("instrument");
+            order.price = (float) jsonResult.getDouble("price");
+            order.side = OandaTypes.Side.valueOf(object.getString("side"));
+            order.stopLoss = (float) object.getDouble("stopLoss");
+            order.takeProfit = (float) object.getDouble("takeProfit");
+            order.trailingStop = (float) object.getDouble("trailingStop");
+            order.units = object.getInt("units");
+            order.time = jsonResult.getString("time");
+            order.type = OandaTypes.OrderType.market;
+            return order;
+
+        } else {
+
+            JSONObject object = jsonResult.getJSONObject("orderOpened");
+            OrderMarketIfTouched order = new OrderMarketIfTouched();
+
+
+            order.id = object.getInt("id");
+            order.expiry = object.getString("expiry");
+            order.instrument = jsonResult.getString("instrument");
+            order.lowerBound = (float) object.getDouble("lowerBound");
+            order.price = (float) jsonResult.getDouble("price");
+            order.side = OandaTypes.Side.valueOf(object.getString("side"));
+            order.stopLoss = (float) object.getDouble("stopLoss");
+            order.takeProfit = (float) object.getDouble("takeProfit");
+            order.trailingStop = (float) object.getDouble("trailingStop");
+            order.units = object.getInt("units");
+            order.upperBound = (float) object.getDouble("upperBound");
+            order.time = jsonResult.getString("time");
+            order.type = OandaTypes.OrderType.marketIfTouched;
+
+            return order;
+        }
+
+
+    }
+
+    private Order fillOrder(HttpResponse<JsonNode> jsonResponse) {
+
+        JSONObject jsonResult = jsonResponse.getBody().getObject();
+
+        OandaTypes.OrderType type = OandaTypes.OrderType.valueOf(jsonResult.getString("type"));
+        if (type == OandaTypes.OrderType.market) {
 
             OrderMarket order = new OrderMarket();
 
             order.instrument = jsonResult.getString("instrument");
             order.price = (float) jsonResult.getDouble("price");
             order.time = jsonResult.getString("time");
-            order.id = oj.getInt("id");
-            order.side = OandaTypes.Side.valueOf(oj.getString("side"));
-            order.stopLoss = (float) oj.getDouble("stopLoss");
-            order.takeProfit = (float) oj.getDouble("takeProfit");
-            order.trailingStop = (float) oj.getDouble("trailingStop");
-            order.units = oj.getInt("units");
-            order.type = OandaTypes.OrderType.market;
+            order.id = jsonResult.getInt("id");
+            order.side = OandaTypes.Side.valueOf(jsonResult.getString("side"));
+            order.stopLoss = (float) jsonResult.getDouble("stopLoss");
+            order.takeProfit = (float) jsonResult.getDouble("takeProfit");
+            order.trailingStop = (float) jsonResult.getDouble("trailingStop");
+            order.units = jsonResult.getInt("units");
+            order.type = type;
 
             return order;
         } else {
-            JSONObject oj = jsonResult.getJSONObject("orderOpened");
-
             OrderMarketIfTouched order = new OrderMarketIfTouched();
 
             order.instrument = jsonResult.getString("instrument");
             order.price = (float) jsonResult.getDouble("price");
             order.time = jsonResult.getString("time");
-            order.id = oj.getInt("id");
-            order.side = OandaTypes.Side.valueOf(oj.getString("side"));
-            order.stopLoss = (float) oj.getDouble("stopLoss");
-            order.takeProfit = (float) oj.getDouble("takeProfit");
-            order.trailingStop = (float) oj.getDouble("trailingStop");
-            order.units = oj.getInt("units");
-            order.expiry = oj.getString("expiry");
-            order.lowerBound = oj.getInt("lowerBound");
-            order.upperBound = oj.getInt("lowerBound");
-            order.type = OandaTypes.OrderType.marketIfTouched;
+            order.id = jsonResult.getInt("id");
+            order.side = OandaTypes.Side.valueOf(jsonResult.getString("side"));
+            order.stopLoss = (float) jsonResult.getDouble("stopLoss");
+            order.takeProfit = (float) jsonResult.getDouble("takeProfit");
+            order.trailingStop = (float) jsonResult.getDouble("trailingStop");
+            order.units = jsonResult.getInt("units");
+            order.expiry = jsonResult.getString("expiry");
+            order.lowerBound = jsonResult.getInt("lowerBound");
+            order.upperBound = jsonResult.getInt("lowerBound");
+            order.type = type;
 
             return order;
         }
     }
 
-    private OrderClosed fillOrderClosed(HttpResponse<JsonNode> jsonResponse){
+    private Order fillOrderClosed(HttpResponse<JsonNode> jsonResponse){
         JSONObject jsonResult = jsonResponse.getBody().getObject();
 
-        OrderClosed orderClosed = new OrderClosed();
+        Order orderClosed = new Order();
         orderClosed.id = jsonResult.getInt("id");
         orderClosed.instrument = jsonResult.getString("instrument");
         orderClosed.price = (float)jsonResult.getDouble("price");

@@ -1,6 +1,6 @@
 package rabun.oanda.rest.models;
 
-public abstract class Order {
+public class Order {
     public int id;
     public String instrument;
     public String time;
