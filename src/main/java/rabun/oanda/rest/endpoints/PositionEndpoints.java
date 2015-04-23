@@ -29,8 +29,12 @@ public class PositionEndpoints extends Endpoint {
         Map<String, String> routeParams = new HashMap<>();
         routeParams.put("account_id", String.valueOf(accountId));
 
-        HttpResponse<JsonNode> response = this.Get(routeParams, null, endpoint);
-        return fillPositions(response);
+        HttpResponse<JsonNode> jsonResponse = this.Get(routeParams, null, endpoint);
+
+        if (jsonResponse.getCode() > 299 || jsonResponse.getCode() < 200)
+            throw new UnirestException(jsonResponse.getBody().toString());
+
+        return fillPositions(jsonResponse);
     }
 
     public Position GetPosition(int accountId, String instrument) throws UnirestException {
@@ -40,8 +44,12 @@ public class PositionEndpoints extends Endpoint {
         routeParams.put("account_id", String.valueOf(accountId));
         routeParams.put("instrument", instrument);
 
-        HttpResponse<JsonNode> response = this.Get(routeParams, null, endpoint);
-        return fillPosition(response);
+        HttpResponse<JsonNode> jsonResponse = this.Get(routeParams, null, endpoint);
+
+        if (jsonResponse.getCode() > 299 || jsonResponse.getCode() < 200)
+            throw new UnirestException(jsonResponse.getBody().toString());
+
+        return fillPosition(jsonResponse);
     }
 
     public PositionClosed ClosePosition(int accountId, String instrument) throws UnirestException {
@@ -52,6 +60,10 @@ public class PositionEndpoints extends Endpoint {
         routeParams.put("instrument", instrument);
 
         HttpResponse<JsonNode> response = this.Delete(routeParams, endpoint);
+
+        if (response.getCode() > 299 || response.getCode() < 200)
+            throw new UnirestException(response.getBody().toString());
+
         return fillPositionClosed(response);
     }
 
