@@ -125,7 +125,7 @@ public class OrderEndpoints extends Endpoint {
         return fillOrder(response);
     }
 
-    public Order UpdateOrder(int accountId, int orderId, Integer units, Float price, String expiry,
+    public Order UpdateOrder(int accountId, int orderId, Integer units, Float price, DateTime expiry,
                              Float lowerBound, Float upperBound, Float stopLoss, Float takeProfit,
                              Integer trailingStop) throws UnirestException {
 
@@ -142,7 +142,7 @@ public class OrderEndpoints extends Endpoint {
         if (price != null)
             fields.put("price", price);
         if (expiry != null)
-            fields.put("expiry", expiry);
+            fields.put("expiry", expiry.toString());
         if (lowerBound != null)
             fields.put("lowerBound", lowerBound);
         if (upperBound != null)
