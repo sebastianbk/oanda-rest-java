@@ -12,15 +12,39 @@ import org.json.JSONObject;
 
 import java.util.*;
 
+/**
+ * ORDER ENDPOINTS
+ */
 public class OrderEndpoints extends Endpoint {
 
     private final String ordersRoute = "/v1/accounts/{account_id}/orders";
     private final String orderRoute = "/v1/accounts/{account_id}/orders/{order_id}";
 
+    /**
+     * @param key Secret access key required to access the api
+     * @param accountType Type of account with which you work (training or real)
+     */
     public OrderEndpoints(String key, AccountType accountType) {
         super(key, accountType);
     }
 
+    /**
+     * This will return all pending orders for an account.
+     * Note: pending take profit or stop loss orders are recorded in the open trade object, and will not be returned in this request.
+     *
+     * Orders can be paginated with the count and maxId parameters.
+     * At most, a maximum of 50 orders can be returned in one query.
+     * If more orders exist than specified by the given or default count,
+     * a URL with maxId set to the next unreturned order will be returned within the Link header.
+     *
+     * @param accountId account id
+     * @param maxId Optional The server will return orders with id less than or equal to this, in descending order (for pagination).
+     * @param count Optional Maximum number of open orders to return. Default: 50. Max value: 500.
+     * @param instrument Optional Retrieve open orders for a specific instrument only. Default: all.
+     * @param ids Optional An URL encoded comma (%2C) separated list of orders to retrieve. Maximum number of ids: 50. No other parameter may be specified with the ids parameter.
+     * @return list of orders
+     * @throws UnirestException
+     */
     public List<Order> GetOrders(int accountId, Integer maxId, Integer count, String instrument, String ids) throws UnirestException {
         List<Order> orders = new ArrayList<>();
 
@@ -53,6 +77,19 @@ public class OrderEndpoints extends Endpoint {
         return orders;
     }
 
+    /**
+     * This will return all pending orders for an account.
+     * Note: pending take profit or stop loss orders are recorded in the open trade object, and will not be returned in this request.
+     *
+     * Orders can be paginated with the count and maxId parameters.
+     * At most, a maximum of 50 orders can be returned in one query.
+     * If more orders exist than specified by the given or default count,
+     * a URL with maxId set to the next unreturned order will be returned within the Link header.
+     *
+     * @param accountId account id
+     * @return list of orders
+     * @throws UnirestException
+     */
     public List<Order> GetOrders(int accountId) throws UnirestException {
         List<Order> orders = new ArrayList<>();
 
@@ -71,6 +108,23 @@ public class OrderEndpoints extends Endpoint {
         return orders;
     }
 
+    /**
+     * Create a new order
+     *
+     * @param accountId account id
+     * @param instrument Required Instrument to open the order on
+     * @param units Required The number of units to open order for
+     * @param side Required Direction of the order, either ‘buy’ or ‘sell’
+     * @param type Required The type of the order ‘limit’, ‘stop’, ‘marketIfTouched’ or ‘market’
+     * @param expiry Required If order type is ‘limit’, ‘stop’, or ‘marketIfTouched’. The order expiration time in UTC. The value specified must be in a valid datetime format
+     * @param price Required If order type is ‘limit’, ‘stop’, or ‘marketIfTouched’. The price where the order is set to trigger at
+     * @param lowerBound Optional The minimum execution price
+     * @param upperBound Optional The maximum execution price
+     * @param takeProfit Optional The take profit price
+     * @param trailingStop Optional The trailing stop distance in pips, up to one decimal place
+     * @return created order
+     * @throws UnirestException
+     */
     public Order CreateOrder(int accountId, String instrument, int units, OandaTypes.Side side, OandaTypes.OrderType type,
                              DateTime expiry, Float price, Float lowerBound, Float upperBound,
                              Integer takeProfit, Integer trailingStop) throws UnirestException {
@@ -110,6 +164,14 @@ public class OrderEndpoints extends Endpoint {
         return fillCreateOrder(jsonResponse);
     }
 
+    /**
+     * Get information for an order
+     *
+     * @param accountId account id
+     * @param orderId order id
+     * @return order
+     * @throws UnirestException
+     */
     public Order GetOrder(int accountId, int orderId) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, orderRoute);
@@ -126,6 +188,22 @@ public class OrderEndpoints extends Endpoint {
         return fillOrder(jsonResponse);
     }
 
+    /**
+     * Modify an existing order
+     *
+     * @param accountId account id
+     * @param orderId order id
+     * @param units Optional The number of units to open order for.
+     * @param price Optional The price at which the order is set to trigger at.
+     * @param expiry Optional The order expiration time in UTC. The value specified must be in a valid datetime format.
+     * @param lowerBound Optional The minimum execution price.
+     * @param upperBound Optional The maximum execution price.
+     * @param stopLoss Optional The stop loss price.
+     * @param takeProfit Optional The take profit price.
+     * @param trailingStop Optional The trailing stop distance in pips, up to one decimal place.
+     * @return order
+     * @throws UnirestException
+     */
     public Order UpdateOrder(int accountId, int orderId, Integer units, Float price, DateTime expiry,
                              Float lowerBound, Float upperBound, Float stopLoss, Float takeProfit,
                              Integer trailingStop) throws UnirestException {
@@ -163,6 +241,14 @@ public class OrderEndpoints extends Endpoint {
         return this.fillOrder(jsonResponse);
     }
 
+    /**
+     * Close an order
+     *
+     * @param accountId account id
+     * @param orderId order id
+     * @return order
+     * @throws UnirestException
+     */
     public Order CloseOrder(int accountId, int orderId) throws UnirestException {
         String endpoint = makeEndpoint(accountType, orderRoute);
 
