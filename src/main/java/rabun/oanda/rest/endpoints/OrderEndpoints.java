@@ -114,10 +114,10 @@ public class OrderEndpoints extends Endpoint {
      * @param accountId account id
      * @param instrument Required Instrument to open the order on
      * @param units Required The number of units to open order for
-     * @param side Required Direction of the order, either ‘buy’ or ‘sell’
-     * @param type Required The type of the order ‘limit’, ‘stop’, ‘marketIfTouched’ or ‘market’
-     * @param expiry Required If order type is ‘limit’, ‘stop’, or ‘marketIfTouched’. The order expiration time in UTC. The value specified must be in a valid datetime format
-     * @param price Required If order type is ‘limit’, ‘stop’, or ‘marketIfTouched’. The price where the order is set to trigger at
+     * @param side Required Direction of the order, either "buy" or "sell"
+     * @param type Required The type of the order "limit", "stop", "marketIfTouched’ or "market"
+     * @param expiry Required If order type is "limit", "stop", or "marketIfTouched". The order expiration time in UTC. The value specified must be in a valid datetime format
+     * @param price Required If order type is "limit", "stop", or "marketIfTouched". The price where the order is set to trigger at
      * @param lowerBound Optional The minimum execution price
      * @param upperBound Optional The maximum execution price
      * @param takeProfit Optional The take profit price
