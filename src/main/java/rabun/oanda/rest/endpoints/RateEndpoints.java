@@ -14,6 +14,9 @@ import java.util.*;
 import rabun.oanda.rest.models.*;
 import rabun.oanda.rest.models.OandaTypes.*;
 
+/**
+ * RATE ENDPOINTS
+ */
 public class RateEndpoints extends Endpoint {
 
     private final String instrumentsRoute = "/v1/instruments";
@@ -24,6 +27,20 @@ public class RateEndpoints extends Endpoint {
         super(key, accountType);
     }
 
+    /**
+     * Get an instrument list
+     *
+     * Get a list of tradeable instruments (currency pairs, CFDs, and commodities) that are available for trading with the account specified.
+     *
+     * @param accountId Required The account id to fetch the list of tradeable instruments for
+     * @param fields Optional An URL encoded (%2C) comma separated list of instrument fields that are to be returned in the response.
+     *               The instrument field will be returned regardless of the input to this query parameter.
+     *               Please see the Response Parameters section below for a list of valid values.
+     * @param instruments Optional An URL encoded (%2C) comma separated list of instruments that are to be returned in the response.
+     *                    If the instruments option is not specified, all instruments will be returned.
+     * @return list of instrument
+     * @throws UnirestException
+     */
     public List<Instrument> GetInstruments(int accountId, String fields, String instruments) throws UnirestException {
         List<Instrument> instrumentList = new ArrayList<>();
 
@@ -62,6 +79,14 @@ public class RateEndpoints extends Endpoint {
         return instrumentList;
     }
 
+    /**
+     * Get current prices
+     *
+     * @param instruments Required An URL encoded (%2C) comma separated list of instruments to fetch prices for.
+     *                    Values should be one of the available instrument from the /v1/instruments response.
+     * @return list of prices
+     * @throws UnirestException
+     */
     public List<Price> GetPrices(String instruments) throws UnirestException {
         List<Price> prices = new ArrayList<>();
 
@@ -96,6 +121,40 @@ public class RateEndpoints extends Endpoint {
 
     }
 
+    /**
+     * Retrieve instrument history
+     *
+     * Get historical information on an instrument
+     *
+     * @param instrument Required Name of the instrument to retrieve history for. The instrument should be one of the available instrument from the /v1/instruments response
+     * @param granularity Optional The time range represented by each candlestick. The value specified will determine the alignment of the first candlestick.
+     * @param count Optional The number of candles to return in the response.
+     *              This parameter may be ignored by the server depending on the time range provided.
+     *              See “Time and Count Semantics” below for a full description.
+     *              If not specified, count will default to 500. The maximum acceptable value for count is 5000.
+     *              Count should not be specified if both the start and end parameters are also specified.
+     * @param start Optional The start timestamp for the range of candles requested. The value specified must be in a valid datetime format.
+     * @param end Optional The end timestamp for the range of candles requested. The value specified must be in a valid datetime format.
+     * @param candleFormat Optional Candlesticks representation (about candestick representation).
+     *                     This can be one of the following: “midpoint” - Midpoint based candlesticks.
+     *                     “bidask” - Bid/Ask based candlesticks The default for candleFormat is “bidask” if the candleFormat parameter is not specified.
+     * @param includeFirst Optional A boolean field which may be set to “true” or “false”.
+     *                     If it is set to “true”, the candlestick covered by the start timestamp will be returned.
+     *                     If it is set to “false”, this candlestick will not be returned.
+     *                     This field exists so clients may easily ensure that they can poll for all candles more recent than their last received candle.
+     *                     The default for includeFirst is “true” if the includeFirst parameter is not specified.
+     * @param dailyAlignment Optional The hour of day used to align candles with hourly, daily, weekly, or monthly granularity.
+     *                       The value specified is interpretted as an hour in the timezone set through the
+     *                       alignmentTimezone parameter and must be an integer between 0 and 23.
+     *                        The default for dailyAlignment is 21 when Eastern Daylight Time is in effect and 22 when
+     *                        Eastern Standard Time is in effect. This corresponds to 17:00 local time in New York.
+     * @param weeklyAlignment Optional The timezone to be used for the dailyAlignment parameter.
+     *                        This parameter does NOT affect the returned timestamp, the start or end parameters, these will always be in UTC.
+     *                        The timezone format used is defined by the http://en.wikipedia.org/wiki/Tz_database, a full list of the
+     *                        timezones supported by the REST API can be found http://developer.oanda.com/docs/timezones.txt.
+     * @return candle
+     * @throws Exception
+     */
     public Candle GetCandles(String instrument, GranularityType granularity, int count, DateTime start, DateTime end,
                              CandleFormat candleFormat, Boolean includeFirst, Byte dailyAlignment,
                              WeeklyAlignment weeklyAlignment) throws Exception {
@@ -122,6 +181,15 @@ public class RateEndpoints extends Endpoint {
 
     }
 
+    /**
+     * Retrieve instrument history
+     *
+     * Get historical information on an instrument
+     *
+     * @param instrument Required Name of the instrument to retrieve history for. The instrument should be one of the available instrument from the /v1/instruments response
+     * @return candle of CandleMid
+     * @throws Exception
+     */
     public Candle<CandleMid> GetCandlesMid(String instrument) throws Exception {
 
         Candle<CandleMid> candle = new Candle<>();
@@ -142,6 +210,16 @@ public class RateEndpoints extends Endpoint {
 
     }
 
+    /**
+     * Retrieve instrument history
+     *
+     * Get historical information on an instrument
+     *
+     * @param instrument Required Name of the instrument to retrieve history for. The instrument should be one of the available instrument from the /v1/instruments response
+     * @param granularity Optional The time range represented by each candlestick. The value specified will determine the alignment of the first candlestick.
+     * @return list of CandleMid
+     * @throws Exception
+     */
     public Candle<CandleMid> GetCandlesMid(String instrument, GranularityType granularity) throws Exception {
 
         Candle<CandleMid> candle = new Candle<>();
@@ -161,6 +239,21 @@ public class RateEndpoints extends Endpoint {
 
     }
 
+    /**
+     * Retrieve instrument history
+     *
+     * Get historical information on an instrument
+     *
+     * @param instrument Required Name of the instrument to retrieve history for. The instrument should be one of the available instrument from the /v1/instruments response
+     * @param granularity Optional The time range represented by each candlestick. The value specified will determine the alignment of the first candlestick.
+     * @param count Optional The number of candles to return in the response.
+     *              This parameter may be ignored by the server depending on the time range provided.
+     *              See “Time and Count Semantics” below for a full description.
+     *              If not specified, count will default to 500. The maximum acceptable value for count is 5000.
+     *              Count should not be specified if both the start and end parameters are also specified.
+     * @return list of CandleMid
+     * @throws Exception
+     */
     public Candle<CandleMid> GetCandlesMid(String instrument, GranularityType granularity, int count) throws Exception {
 
         Candle<CandleMid> candle = new Candle<>();
@@ -180,6 +273,15 @@ public class RateEndpoints extends Endpoint {
 
     }
 
+    /**
+     * Retrieve instrument history
+     *
+     * Get historical information on an instrument
+     *
+     * @param instrument Required Name of the instrument to retrieve history for. The instrument should be one of the available instrument from the /v1/instruments response
+     * @return list of CandleBidAsk
+     * @throws Exception
+     */
     public Candle<CandleBidAsk> GetCandlesBidAsk(String instrument) throws Exception {
 
         Candle<CandleBidAsk> candle = new Candle<>();
@@ -200,12 +302,22 @@ public class RateEndpoints extends Endpoint {
 
     }
 
-    public Candle<CandleBidAsk> GetCandlesBidAsk(String instrument, GranularityType granularityType) throws Exception {
+    /**
+     * Retrieve instrument history
+     *
+     * Get historical information on an instrument
+     *
+     * @param instrument Required Name of the instrument to retrieve history for. The instrument should be one of the available instrument from the /v1/instruments response
+     * @param granularity Optional The time range represented by each candlestick. The value specified will determine the alignment of the first candlestick.
+     * @return list of CandleBidAsk
+     * @throws Exception
+     */
+    public Candle<CandleBidAsk> GetCandlesBidAsk(String instrument, GranularityType granularity) throws Exception {
 
         Candle<CandleBidAsk> candle = new Candle<>();
         String endpoint = makeEndpoint(accountType, candleRoute);
 
-        Map<String, Object> fields = makeCandle(instrument, granularityType, null, null, null, CandleFormat.bidask, null, null, null);
+        Map<String, Object> fields = makeCandle(instrument, granularity, null, null, null, CandleFormat.bidask, null, null, null);
 
         HttpResponse<JsonNode> jsonResponse = this.Get(null, fields, endpoint);
 
@@ -219,12 +331,27 @@ public class RateEndpoints extends Endpoint {
 
     }
 
-    public Candle<CandleBidAsk> GetCandlesBidAsk(String instrument, GranularityType granularityType, int count) throws Exception {
+    /**
+     * Retrieve instrument history
+     *
+     * Get historical information on an instrument
+     *
+     * @param instrument Required Name of the instrument to retrieve history for. The instrument should be one of the available instrument from the /v1/instruments response
+     * @param granularity Optional The time range represented by each candlestick. The value specified will determine the alignment of the first candlestick.
+     * @param count Optional The number of candles to return in the response.
+     *              This parameter may be ignored by the server depending on the time range provided.
+     *              See “Time and Count Semantics” below for a full description.
+     *              If not specified, count will default to 500. The maximum acceptable value for count is 5000.
+     *              Count should not be specified if both the start and end parameters are also specified.
+     * @return list of CandleBidAsk
+     * @throws Exception
+     */
+    public Candle<CandleBidAsk> GetCandlesBidAsk(String instrument, GranularityType granularity, int count) throws Exception {
 
         Candle<CandleBidAsk> candle = new Candle<>();
         String endpoint = makeEndpoint(accountType, candleRoute);
 
-        Map<String, Object> fields = makeCandle(instrument, granularityType, count, null, null, CandleFormat.bidask, null, null, null);
+        Map<String, Object> fields = makeCandle(instrument, granularity, count, null, null, CandleFormat.bidask, null, null, null);
 
         HttpResponse<JsonNode> jsonResponse = this.Get(null, fields, endpoint);
 
@@ -300,7 +427,7 @@ public class RateEndpoints extends Endpoint {
 
         if (candleFormat == CandleFormat.bidask) {
 
-            List<CandleBidAsk> candles = candle.candles;
+            List candles = candle.candles;
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);

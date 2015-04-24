@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * TRANSACTION ENDPOINTS
+ */
 public class TransactionEndpoints extends Endpoint {
 
     private final String transactionsRoute = "/v1/accounts/{account_id}/transactions";
@@ -21,6 +24,24 @@ public class TransactionEndpoints extends Endpoint {
         super(key, accountType);
     }
 
+    /**
+     * Get transaction history
+     *
+     * @param accountId account id
+     * @param maxId Optional The first transaction to get.
+     *              The server will return transactions with id less than or equal to this, in descending order.
+     * @param minId Optional The last transaction to get.
+     *              The server will return transactions with id greater or equal to this, in descending order.
+     * @param count Optional The maximum number of transactions to return.
+     *              The maximum value that can be specified is 500.
+     *              By default, if count is not specified, a maximum of 50 transactions will be fetched.
+     *              Note: Transactions requests with the count parameter specified is rate limited to 1 per every 60 seconds.
+     * @param instrument Optional Retrieve transactions for a specific instrument only. Default: all
+     * @param ids Optional An URL encoded comma (%2C) separated list of transaction ids to retrieve.
+     *            Maximum number of ids: 50. No other parameter may be specified with the ids parameter.
+     * @return list of trasactions
+     * @throws UnirestException
+     */
     public List<Transaction> GetTransactions(int accountId, Integer maxId, Integer minId, Integer count,
                                              String instrument, String ids) throws UnirestException {
 

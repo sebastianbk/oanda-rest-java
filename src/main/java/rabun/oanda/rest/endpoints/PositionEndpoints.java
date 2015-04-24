@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * POSITION ENDPOINTS
+ */
 public class PositionEndpoints extends Endpoint {
 
     private final String positionsRoute = "/v1/accounts/{account_id}/positions";
@@ -22,6 +25,12 @@ public class PositionEndpoints extends Endpoint {
         super(key, accountType);
     }
 
+    /**
+     * Get a list of all open positions
+     * @param accountId account id
+     * @return list of positions
+     * @throws UnirestException
+     */
     public List<Position> GetPositions(int accountId) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, positionsRoute);
@@ -37,6 +46,14 @@ public class PositionEndpoints extends Endpoint {
         return fillPositions(jsonResponse);
     }
 
+    /**
+     * Get the position for an instrument
+     *
+     * @param accountId account id
+     * @param instrument instrument
+     * @return position
+     * @throws UnirestException
+     */
     public Position GetPosition(int accountId, String instrument) throws UnirestException {
         String endpoint = makeEndpoint(accountType, positionRoute);
 
@@ -52,6 +69,14 @@ public class PositionEndpoints extends Endpoint {
         return fillPosition(jsonResponse);
     }
 
+    /**
+     * Close an existing position
+     *
+     * @param accountId account id
+     * @param instrument instrument
+     * @return positionClosed model
+     * @throws UnirestException
+     */
     public PositionClosed ClosePosition(int accountId, String instrument) throws UnirestException {
         String endpoint = makeEndpoint(accountType, positionRoute);
 

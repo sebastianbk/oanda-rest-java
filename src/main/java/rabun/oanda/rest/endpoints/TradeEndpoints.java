@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Get a list of open trades
+ */
 public class TradeEndpoints extends Endpoint {
 
     private final String tradesRoute = "/v1/accounts/{account_id}/trades";
@@ -22,6 +25,23 @@ public class TradeEndpoints extends Endpoint {
         super(key, accountType);
     }
 
+    /**
+     * Get a list of open trades
+     *
+     * Pagination
+     * Trades can be paginated with the count and maxId parameters.
+     * At most, a maximum of 50 trades can be returned in one query.
+     * If more trades exist than specified by the given or default count, a url with maxId set to the next
+     * unreturned trade will be returned within the Link header.
+     *
+     * @param accountId account id
+     * @param maxId Optional The server will return trades with id less than or equal to this, in descending order (for pagination).
+     * @param count Optional Maximum number of open trades to return. Default: 50 Max value: 500
+     * @param instrument Optional Retrieve open trades for a specific instrument only Default: all
+     * @param ids Optional A (URL encoded) comma separated list of trades to retrieve. Maximum number of ids: 50. No other parameter may be specified with the ids parameter.
+     * @return list of trades
+     * @throws UnirestException
+     */
     public List<Trade> GetTrades(int accountId, Integer maxId, Integer count, String instrument, String ids) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, tradesRoute);
@@ -48,6 +68,14 @@ public class TradeEndpoints extends Endpoint {
         return fillTrades(response);
     }
 
+    /**
+     * Get information on a specific trade
+     *
+     * @param accountId account id
+     * @param tradeId trade id
+     * @return trade
+     * @throws UnirestException
+     */
     public Trade GetTrade(int accountId, int tradeId) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, tradeRoute);
@@ -65,6 +93,20 @@ public class TradeEndpoints extends Endpoint {
         return fillTrade(response);
     }
 
+    /**
+     * Modify an existing trade
+     *
+     * Note: Only the specified parameters will be modified.
+     * All other parameters will remain unchanged. To remove an optional parameter, set its value to 0.
+     *
+     * @param accountId account id
+     * @param tradeId trade id
+     * @param stopLoss Optional Stop Loss value
+     * @param takeProfit Optional Take Profit value
+     * @param trailingStop Optional Trailing Stop distance in pips, up to one decimal place
+     * @return trade
+     * @throws UnirestException
+     */
     public Trade UpdateTrade(int accountId, int tradeId, Float stopLoss, Float takeProfit, Integer trailingStop) throws UnirestException {
         String endpoint = makeEndpoint(accountType, tradeRoute);
 
@@ -86,6 +128,14 @@ public class TradeEndpoints extends Endpoint {
         return fillTrade(response);
     }
 
+    /**
+     * Close an open trade
+     *
+     * @param accountId account id
+     * @param tradeId trade id
+     * @return TradeClosed model
+     * @throws UnirestException
+     */
     public TradeClosed CloseTrade(int accountId, int tradeId) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, tradeRoute);
