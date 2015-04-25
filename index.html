@@ -85,7 +85,11 @@ mvn package -Dmaven.test.skip=true
     </pre>
 
     <p>
-        Further use of the received jar file in your project and don't forget to connect the above dependencies.
+        Note: <b>maven 3.x doesn't work with intellij idea. Using terminal command line.</b>
+    </p>
+
+    <p>
+        Further use of the received jar file in your project and don't forget to get some dependencies.
     </p>
 
     <h3>
@@ -122,10 +126,6 @@ mvn package -Dmaven.test.skip=true
         For more info see the docs files are in the project
     </p>
 
-    <h3>
-        <a id="rather-drive-stick" class="anchor" href="#rather-drive-stick" aria-hidden="true"><span
-                class="octicon octicon-link"></span></a>OrderEndpoints</h3>
-
     <p>
         The first thing you need to create an instance of the class OrderEndpoints.
         In the constructor pass the secret key and the account type (real or training)
@@ -139,52 +139,9 @@ OrderEndpoints orderEndpoints = new OrderEndpoints(key, Endpoint.AccountType.pra
         </code>
     </pre>
 
-<p>
-    <b>GetOrders</b>
-</p>
-    <pre><code class="java">
-List&lt;Order&gt; orders = orderEndpoints.GetOrders(accountId, null, null, "EUR_USD", null);
-    </code></pre>
-
     <p>
-        <b>
-            CreateOrder
-        </b>
+        More information you can find at source docs.
     </p>
-
-<pre>
-    <code class="java">
-DateTime d = new DateTime(1429804625000L, DateTimeZone.UTC);
-OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
-    </code>
-</pre>
-
-    <p>
-        <b>
-            GetOrder
-        </b>
-    </p>
-    <pre><code class="java">
-Order o = orderEndpoints.GetOrder(accountId, order.id);
-    </code></pre>
-
-    <p>
-        <b>
-            UpdateOrder
-        </b>
-    </p>
-    <pre><code class="java">
-Order upOrder = orderEndpoints.UpdateOrder(accountId, order.id, 200, 1.12f, null, null, null, null, null, null);
-    </code></pre>
-
-    <p>
-        <b>
-            CloseOrder
-        </b>
-    </p>
-    <pre><code class="java">
-Order o = orderEndpoints.CloseOrder(accountId, order.id);
-    </code></pre>
 
     <h3>
         <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span
