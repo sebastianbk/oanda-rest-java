@@ -1,4 +1,4 @@
-# OANDA API Wrapper with 64-bit Integer Support
+# OANDA API with 64-bit Integer Support
 
 This fork uses 64-bit integers in many of the project's methods to align with OANDA's new REST API.
 

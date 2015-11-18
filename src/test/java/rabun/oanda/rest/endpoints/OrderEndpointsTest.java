@@ -21,7 +21,7 @@ public class OrderEndpointsTest {
     @Before
     public void Init() {
         accountId = 5517316;
-        key = "37f44395cd5a2d5cd40186fa89eb5bc0-b1d8e46003c4f77a689ab5aa540482e4";
+        key = "710e18681ce711a43fc70f4a5a7dff7b-0596f1960a2868ad558c266a0319ce11";
         orderEndpoints = new OrderEndpoints(key, Endpoint.AccountType.practice);
     }
 
