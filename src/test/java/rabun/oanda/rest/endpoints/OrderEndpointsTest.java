@@ -15,19 +15,20 @@ import static org.junit.Assert.*;
 public class OrderEndpointsTest {
 
     public String key;
-    public long accountId;
+    public int accountId;
     public OrderEndpoints orderEndpoints;
 
     @Before
     public void Init() {
-        accountId = 5517316L;
-        key = "YOUR-KEY";
+        accountId = 5517316;
+        key = "37f44395cd5a2d5cd40186fa89eb5bc0-b1d8e46003c4f77a689ab5aa540482e4";
         orderEndpoints = new OrderEndpoints(key, Endpoint.AccountType.practice);
     }
 
     @Test
     public void testCreateOrderMarketIfTouched() throws Exception {
-        OrderMarket order = (OrderMarket) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.market, null, null, null, null, null, null);
+        DateTime d = new DateTime(1448964000000L, DateTimeZone.UTC);
+        OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
 
         assertNotNull(order);
     }
@@ -58,7 +59,7 @@ public class OrderEndpointsTest {
 
     @Test
     public void testGetOrder() throws Exception {
-        DateTime d = new DateTime(1448964000000L);
+        DateTime d = new DateTime(1448964000000L, DateTimeZone.UTC);
         OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
 
         assertNotNull(order);
@@ -69,7 +70,7 @@ public class OrderEndpointsTest {
 
     @Test
     public void testUpdateOrder() throws Exception {
-        DateTime d = new DateTime(1448964000000L, DateTimeZone.UTC);
+        DateTime d = new DateTime(1429804625000L, DateTimeZone.UTC);
         OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
 
 
