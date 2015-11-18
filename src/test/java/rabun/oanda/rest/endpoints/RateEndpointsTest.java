@@ -19,7 +19,7 @@ public class RateEndpointsTest {
     @Before
     public void setUp() throws Exception {
         accountId = 5517316;
-        key = "68845455388b640e79cb2a8da89db3a4-6aa7d276beb23ed544036b802a4bc1c7";
+        key = "YOUR-KEY";
         rateEndpoints = new RateEndpoints(key, Endpoint.AccountType.practice);
     }
 

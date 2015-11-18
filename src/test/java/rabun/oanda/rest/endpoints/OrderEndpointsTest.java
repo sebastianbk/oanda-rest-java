@@ -20,8 +20,8 @@ public class OrderEndpointsTest {
 
     @Before
     public void Init() {
-        accountId = 5517316;
-        key = "68845455388b640e79cb2a8da89db3a4-6aa7d276beb23ed544036b802a4bc1c7";
+        accountId = 5517316L;
+        key = "YOUR-KEY";
         orderEndpoints = new OrderEndpoints(key, Endpoint.AccountType.practice);
     }
 
@@ -34,7 +34,7 @@ public class OrderEndpointsTest {
 
     @Test
     public void testGetOrders() throws Exception {
-        DateTime d = new DateTime(1447840660000L, DateTimeZone.UTC);
+        DateTime d = new DateTime(1448964000000L, DateTimeZone.UTC);
         OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
 
         assertNotNull(order);
@@ -46,7 +46,7 @@ public class OrderEndpointsTest {
 
     @Test
     public void testGetOrders1() throws Exception {
-        DateTime d = new DateTime(1447840660000L, DateTimeZone.UTC);
+        DateTime d = new DateTime(1448964000000L, DateTimeZone.UTC);
         OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
 
         assertNotNull(order);
@@ -58,7 +58,7 @@ public class OrderEndpointsTest {
 
     @Test
     public void testGetOrder() throws Exception {
-        DateTime d = new DateTime(1447840660000L);
+        DateTime d = new DateTime(1448964000000L);
         OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
 
         assertNotNull(order);
@@ -69,7 +69,7 @@ public class OrderEndpointsTest {
 
     @Test
     public void testUpdateOrder() throws Exception {
-        DateTime d = new DateTime(1447840660000L, DateTimeZone.UTC);
+        DateTime d = new DateTime(1448964000000L, DateTimeZone.UTC);
         OrderMarketIfTouched order = (OrderMarketIfTouched) orderEndpoints.CreateOrder(accountId, "EUR_USD", 100, OandaTypes.Side.buy, OandaTypes.OrderType.marketIfTouched, d, 1.09f, 1.06f, 1.08f, null, null);
 
 

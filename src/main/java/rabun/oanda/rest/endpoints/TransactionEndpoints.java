@@ -73,12 +73,12 @@ public class TransactionEndpoints extends Endpoint {
             switch (transactionType) {
                 case MARKET_ORDER_CREATE: {
                     TransactionMarketOrderCreate transaction = new TransactionMarketOrderCreate();
-                    transaction.id = obj.getInt("id");
-                    transaction.accountId = obj.getInt("accountId");
+                    transaction.id = obj.getLong("id");
+                    transaction.accountId = obj.getLong("accountId");
                     transaction.time = obj.getString("time");
                     transaction.type = transactionType;
                     transaction.instrument = obj.getString("instrument");
-                    transaction.units = obj.getInt("units");
+                    transaction.units = obj.getLong("units");
                     transaction.side = OandaTypes.Side.valueOf(obj.getString("side"));
                     transaction.price = (float) obj.getDouble("price");
                     transaction.pl = obj.getInt("pl");
@@ -87,23 +87,23 @@ public class TransactionEndpoints extends Endpoint {
 
                     JSONObject toj = obj.getJSONObject("tradeOpened");
                     transaction.tradeOpened = new TradeOpened();
-                    transaction.tradeOpened.id = toj.getInt("id");
-                    transaction.tradeOpened.units = toj.getInt("units");
+                    transaction.tradeOpened.id = toj.getLong("id");
+                    transaction.tradeOpened.units = toj.getLong("units");
 
                     transactions.add(transaction);
                 }
 
                 case STOP_ORDER_CREATE: {
                     TransactionStopOrderCreate transaction = new TransactionStopOrderCreate();
-                    transaction.id = obj.getInt("id");
-                    transaction.accountId = obj.getInt("accountId");
+                    transaction.id = obj.getLong("id");
+                    transaction.accountId = obj.getLong("accountId");
                     transaction.time = obj.getString("time");
                     transaction.type = transactionType;
                     transaction.instrument = obj.getString("instrument");
-                    transaction.units = obj.getInt("units");
+                    transaction.units = obj.getLong("units");
                     transaction.side = OandaTypes.Side.valueOf(obj.getString("side"));
                     transaction.price = (float) obj.getDouble("price");
-                    transaction.expiry = obj.getInt("expiry");
+                    transaction.expiry = obj.getLong("expiry");
                     transaction.reason = OandaTypes.Reason.valueOf(obj.getString("reason"));
 
                     transactions.add(transaction);

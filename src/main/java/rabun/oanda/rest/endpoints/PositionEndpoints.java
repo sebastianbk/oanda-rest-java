@@ -103,7 +103,7 @@ public class PositionEndpoints extends Endpoint {
             position.avgPrice = (float) object.getDouble("avgPrice");
             position.instrument = object.getString("instrument");
             position.side = OandaTypes.Side.valueOf(object.getString("side"));
-            position.units = object.getInt("units");
+            position.units = object.getLong("units");
 
             positions.add(position);
         }
@@ -119,7 +119,7 @@ public class PositionEndpoints extends Endpoint {
         position.avgPrice = (float) object.getDouble("avgPrice");
         position.instrument = object.getString("instrument");
         position.side = OandaTypes.Side.valueOf(object.getString("side"));
-        position.units = object.getInt("units");
+        position.units = object.getLong("units");
 
         return position;
     }
@@ -130,13 +130,13 @@ public class PositionEndpoints extends Endpoint {
 
         positionClosed.instrument = object.getString("instrument");
         positionClosed.price = (float) object.getDouble("price");
-        positionClosed.totalUnits = object.getInt("totalUnits");
+        positionClosed.totalUnits = object.getLong("totalUnits");
 
         JSONArray array = object.getJSONArray("ids");
-        positionClosed.ids = new int[array.length()];
+        positionClosed.ids = new long[array.length()];
 
         for(int i = 0; i < array.length(); i++){
-            positionClosed.ids[i] = array.getInt(i);
+            positionClosed.ids[i] = array.getLong(i);
         }
 
         return positionClosed;

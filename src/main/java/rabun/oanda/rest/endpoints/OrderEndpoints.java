@@ -279,7 +279,7 @@ public class OrderEndpoints extends Endpoint {
 
                 OrderMarket order = new OrderMarket();
 
-                order.id = object.getInt("id");
+                order.id = object.getLong("id");
                 order.instrument = object.getString("instrument");
                 order.price = (float) object.getDouble("price");
                 order.side = OandaTypes.Side.valueOf(object.getString("side"));
@@ -287,7 +287,7 @@ public class OrderEndpoints extends Endpoint {
                 order.takeProfit = (float) object.getDouble("takeProfit");
                 order.trailingStop = (float) object.getDouble("trailingStop");
                 order.type = OandaTypes.OrderType.valueOf(object.getString("type"));
-                order.units = object.getInt("units");
+                order.units = object.getLong("units");
                 order.time = object.getString("time");
 
                 orders.add(order);
@@ -295,7 +295,7 @@ public class OrderEndpoints extends Endpoint {
 
                 OrderMarketIfTouched order = new OrderMarketIfTouched();
 
-                order.id = object.getInt("id");
+                order.id = object.getLong("id");
                 order.expiry = object.getString("expiry");
                 order.instrument = object.getString("instrument");
                 order.lowerBound = (float) object.getDouble("lowerBound");
@@ -305,7 +305,7 @@ public class OrderEndpoints extends Endpoint {
                 order.takeProfit = (float) object.getDouble("takeProfit");
                 order.trailingStop = (float) object.getDouble("trailingStop");
                 order.type = OandaTypes.OrderType.valueOf(object.getString("type"));
-                order.units = object.getInt("units");
+                order.units = object.getLong("units");
                 order.upperBound = (float) object.getDouble("upperBound");
                 order.time = object.getString("time");
 
@@ -324,14 +324,14 @@ public class OrderEndpoints extends Endpoint {
 
             OrderMarket order = new OrderMarket();
 
-            order.id = object.getInt("id");
+            order.id = object.getLong("id");
             order.instrument = jsonResult.getString("instrument");
             order.price = (float) jsonResult.getDouble("price");
             order.side = OandaTypes.Side.valueOf(object.getString("side"));
             order.stopLoss = (float) object.getDouble("stopLoss");
             order.takeProfit = (float) object.getDouble("takeProfit");
             order.trailingStop = (float) object.getDouble("trailingStop");
-            order.units = object.getInt("units");
+            order.units = object.getLong("units");
             order.time = jsonResult.getString("time");
             order.type = OandaTypes.OrderType.market;
             return order;
@@ -342,7 +342,7 @@ public class OrderEndpoints extends Endpoint {
             OrderMarketIfTouched order = new OrderMarketIfTouched();
 
 
-            order.id = object.getInt("id");
+            order.id = object.getLong("id");
             order.expiry = object.getString("expiry");
             order.instrument = jsonResult.getString("instrument");
             order.lowerBound = (float) object.getDouble("lowerBound");
@@ -351,7 +351,7 @@ public class OrderEndpoints extends Endpoint {
             order.stopLoss = (float) object.getDouble("stopLoss");
             order.takeProfit = (float) object.getDouble("takeProfit");
             order.trailingStop = (float) object.getDouble("trailingStop");
-            order.units = object.getInt("units");
+            order.units = object.getLong("units");
             order.upperBound = (float) object.getDouble("upperBound");
             order.time = jsonResult.getString("time");
             order.type = OandaTypes.OrderType.marketIfTouched;
@@ -374,12 +374,12 @@ public class OrderEndpoints extends Endpoint {
             order.instrument = jsonResult.getString("instrument");
             order.price = (float) jsonResult.getDouble("price");
             order.time = jsonResult.getString("time");
-            order.id = jsonResult.getInt("id");
+            order.id = jsonResult.getLong("id");
             order.side = OandaTypes.Side.valueOf(jsonResult.getString("side"));
             order.stopLoss = (float) jsonResult.getDouble("stopLoss");
             order.takeProfit = (float) jsonResult.getDouble("takeProfit");
             order.trailingStop = (float) jsonResult.getDouble("trailingStop");
-            order.units = jsonResult.getInt("units");
+            order.units = jsonResult.getLong("units");
             order.type = type;
 
             return order;
@@ -389,12 +389,12 @@ public class OrderEndpoints extends Endpoint {
             order.instrument = jsonResult.getString("instrument");
             order.price = (float) jsonResult.getDouble("price");
             order.time = jsonResult.getString("time");
-            order.id = jsonResult.getInt("id");
+            order.id = jsonResult.getLong("id");
             order.side = OandaTypes.Side.valueOf(jsonResult.getString("side"));
             order.stopLoss = (float) jsonResult.getDouble("stopLoss");
             order.takeProfit = (float) jsonResult.getDouble("takeProfit");
             order.trailingStop = (float) jsonResult.getDouble("trailingStop");
-            order.units = jsonResult.getInt("units");
+            order.units = jsonResult.getLong("units");
             order.expiry = jsonResult.getString("expiry");
             order.lowerBound = jsonResult.getInt("lowerBound");
             order.upperBound = jsonResult.getInt("lowerBound");
@@ -408,7 +408,7 @@ public class OrderEndpoints extends Endpoint {
         JSONObject jsonResult = jsonResponse.getBody().getObject();
 
         Order orderClosed = new Order();
-        orderClosed.id = jsonResult.getInt("id");
+        orderClosed.id = jsonResult.getLong("id");
         orderClosed.instrument = jsonResult.getString("instrument");
         orderClosed.price = (float)jsonResult.getDouble("price");
         orderClosed.side = OandaTypes.Side.valueOf(jsonResult.getString("side"));

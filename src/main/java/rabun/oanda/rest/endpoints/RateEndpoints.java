@@ -70,7 +70,7 @@ public class RateEndpoints extends Endpoint {
 
             instrument.displayName = object.getString("displayName");
             instrument.instrument = object.getString("instrument");
-            instrument.maxTradeUnits = object.getInt("maxTradeUnits");
+            instrument.maxTradeUnits = object.getLong("maxTradeUnits");
             instrument.pip = (float) object.getDouble("pip");
 
             instrumentList.add(instrument);
@@ -443,7 +443,7 @@ public class RateEndpoints extends Endpoint {
                 candleBidAsk.openBid = (float) object.getDouble("openBid");
                 candleBidAsk.complete = object.getBoolean("complete");
                 candleBidAsk.time = object.getString("time");
-                candleBidAsk.volume = object.getInt("volume");
+                candleBidAsk.volume = object.getLong("volume");
 
                 candles.add(candleBidAsk);
             }
@@ -457,7 +457,7 @@ public class RateEndpoints extends Endpoint {
                 candleMid.highMid = (float) object.getDouble("highMid");
                 candleMid.lowMid = (float) object.getDouble("lowMid");
                 candleMid.openMid = (float) object.getDouble("openMid");
-                candleMid.volume = object.getInt("volume");
+                candleMid.volume = object.getLong("volume");
                 candleMid.time = object.getString("time");
                 candleMid.complete = object.getBoolean("complete");
 

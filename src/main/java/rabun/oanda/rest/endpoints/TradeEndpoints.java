@@ -163,8 +163,8 @@ public class TradeEndpoints extends Endpoint {
             JSONObject obj = array.getJSONObject(i);
             Trade trade = new Trade();
 
-            trade.id = obj.getInt("id");
-            trade.units = obj.getInt("units");
+            trade.id = obj.getLong("id");
+            trade.units = obj.getLong("units");
             trade.side = OandaTypes.Side.valueOf(obj.getString("side"));
             trade.instrument = obj.getString("instrument");
             trade.time = obj.getString("time");
@@ -184,8 +184,8 @@ public class TradeEndpoints extends Endpoint {
         JSONObject object = response.getBody().getObject();
         Trade trade = new Trade();
 
-        trade.id = object.getInt("id");
-        trade.units = object.getInt("units");
+        trade.id = object.getLong("id");
+        trade.units = object.getLong("units");
         trade.side = OandaTypes.Side.valueOf(object.getString("side"));
         trade.instrument = object.getString("instrument");
         trade.time = object.getString("time");
@@ -202,7 +202,7 @@ public class TradeEndpoints extends Endpoint {
         JSONObject object = response.getBody().getObject();
         TradeClosed trade = new TradeClosed();
 
-        trade.id = object.getInt("id");
+        trade.id = object.getLong("id");
         trade.instrument = object.getString("instrument");
         trade.price = (float) object.getDouble("price");
         trade.profit = (float) object.getDouble("profit");
