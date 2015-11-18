@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class OrderEndpointsTest {
 
     public String key;
-    public int accountId;
+    public long accountId;
     public OrderEndpoints orderEndpoints;
 
     @Before
