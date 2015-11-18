@@ -1,7 +1,7 @@
 package rabun.oanda.rest.models;
 
 public class Order {
-    public int id;
+    public long id;
     public String instrument;
     public String time;
     public float price;

@@ -1,8 +1,8 @@
 package rabun.oanda.rest.models;
 
 public class TransactionTrailingStopField extends TransactionSimple {
-    public int tradeId;
+    public long tradeId;
     public float pl;
-    public int interest;
+    public long interest;
     public float accountBalance;
 }

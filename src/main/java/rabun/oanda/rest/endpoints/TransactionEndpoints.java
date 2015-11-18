@@ -42,7 +42,7 @@ public class TransactionEndpoints extends Endpoint {
      * @return list of trasactions
      * @throws UnirestException
      */
-    public List<Transaction> GetTransactions(int accountId, Integer maxId, Integer minId, Integer count,
+    public List<Transaction> GetTransactions(long accountId, long maxId, long minId, long count,
                                              String instrument, String ids) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, transactionsRoute);

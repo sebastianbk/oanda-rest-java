@@ -1,8 +1,8 @@
 package rabun.oanda.rest.models;
 
 public class Trade {
-    public int id;
-    public int units;
+    public long id;
+    public long units;
     public OandaTypes.Side side;
     public String instrument;
     public String time;

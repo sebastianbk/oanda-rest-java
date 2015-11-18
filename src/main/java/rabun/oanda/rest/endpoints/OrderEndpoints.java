@@ -45,7 +45,7 @@ public class OrderEndpoints extends Endpoint {
      * @return list of orders
      * @throws UnirestException
      */
-    public List<Order> GetOrders(int accountId, Integer maxId, Integer count, String instrument, String ids) throws UnirestException {
+    public List<Order> GetOrders(long accountId, Long maxId, Long count, String instrument, String ids) throws UnirestException {
         List<Order> orders = new ArrayList<>();
 
         String endpoint = makeEndpoint(accountType, ordersRoute);
@@ -90,7 +90,7 @@ public class OrderEndpoints extends Endpoint {
      * @return list of orders
      * @throws UnirestException
      */
-    public List<Order> GetOrders(int accountId) throws UnirestException {
+    public List<Order> GetOrders(long accountId) throws UnirestException {
         List<Order> orders = new ArrayList<>();
 
         String endpoint = makeEndpoint(accountType, ordersRoute);
@@ -125,9 +125,9 @@ public class OrderEndpoints extends Endpoint {
      * @return created order
      * @throws UnirestException
      */
-    public Order CreateOrder(int accountId, String instrument, int units, OandaTypes.Side side, OandaTypes.OrderType type,
+    public Order CreateOrder(long accountId, String instrument, long units, OandaTypes.Side side, OandaTypes.OrderType type,
                              DateTime expiry, Float price, Float lowerBound, Float upperBound,
-                             Integer takeProfit, Integer trailingStop) throws UnirestException {
+                             Long takeProfit, Long trailingStop) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, ordersRoute);
 
@@ -172,7 +172,7 @@ public class OrderEndpoints extends Endpoint {
      * @return order
      * @throws UnirestException
      */
-    public Order GetOrder(int accountId, int orderId) throws UnirestException {
+    public Order GetOrder(long accountId, long orderId) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, orderRoute);
 
@@ -204,9 +204,9 @@ public class OrderEndpoints extends Endpoint {
      * @return order
      * @throws UnirestException
      */
-    public Order UpdateOrder(int accountId, int orderId, Integer units, Float price, DateTime expiry,
+    public Order UpdateOrder(long accountId, long orderId, Long units, Float price, DateTime expiry,
                              Float lowerBound, Float upperBound, Float stopLoss, Float takeProfit,
-                             Integer trailingStop) throws UnirestException {
+                             Long trailingStop) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, orderRoute);
 
@@ -249,7 +249,7 @@ public class OrderEndpoints extends Endpoint {
      * @return order
      * @throws UnirestException
      */
-    public Order CloseOrder(int accountId, int orderId) throws UnirestException {
+    public Order CloseOrder(long accountId, long orderId) throws UnirestException {
         String endpoint = makeEndpoint(accountType, orderRoute);
 
         Map<String, String> routeParams = new HashMap<>();

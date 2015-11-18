@@ -31,7 +31,7 @@ public class PositionEndpoints extends Endpoint {
      * @return list of positions
      * @throws UnirestException
      */
-    public List<Position> GetPositions(int accountId) throws UnirestException {
+    public List<Position> GetPositions(long accountId) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, positionsRoute);
 
@@ -54,7 +54,7 @@ public class PositionEndpoints extends Endpoint {
      * @return position
      * @throws UnirestException
      */
-    public Position GetPosition(int accountId, String instrument) throws UnirestException {
+    public Position GetPosition(long accountId, String instrument) throws UnirestException {
         String endpoint = makeEndpoint(accountType, positionRoute);
 
         Map<String, String> routeParams = new HashMap<>();
@@ -77,7 +77,7 @@ public class PositionEndpoints extends Endpoint {
      * @return positionClosed model
      * @throws UnirestException
      */
-    public PositionClosed ClosePosition(int accountId, String instrument) throws UnirestException {
+    public PositionClosed ClosePosition(long accountId, String instrument) throws UnirestException {
         String endpoint = makeEndpoint(accountType, positionRoute);
 
         Map<String, String> routeParams = new HashMap<>();

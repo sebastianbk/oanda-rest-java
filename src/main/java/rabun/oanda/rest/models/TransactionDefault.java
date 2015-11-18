@@ -1,7 +1,7 @@
 package rabun.oanda.rest.models;
 
 public class TransactionDefault extends TransactionSimple {
-    public Integer expiry;
+    public long expiry;
     public OandaTypes.Reason reason;
     public Float lowerBound;
     public Float upperBound;

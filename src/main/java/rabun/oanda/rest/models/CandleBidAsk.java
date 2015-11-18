@@ -10,6 +10,6 @@ public class CandleBidAsk {
     public float lowAsk;
     public float closeBid;
     public float closeAsk;
-    public int volume;
+    public long volume;
     public boolean complete;
 }

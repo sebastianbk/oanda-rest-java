@@ -41,7 +41,7 @@ public class RateEndpoints extends Endpoint {
      * @return list of instrument
      * @throws UnirestException
      */
-    public List<Instrument> GetInstruments(int accountId, String fields, String instruments) throws UnirestException {
+    public List<Instrument> GetInstruments(long accountId, String fields, String instruments) throws UnirestException {
         List<Instrument> instrumentList = new ArrayList<>();
 
         String endpoint = makeEndpoint(accountType, instrumentsRoute);
@@ -155,7 +155,7 @@ public class RateEndpoints extends Endpoint {
      * @return candle
      * @throws Exception
      */
-    public Candle GetCandles(String instrument, GranularityType granularity, int count, DateTime start, DateTime end,
+    public Candle GetCandles(String instrument, GranularityType granularity, long count, DateTime start, DateTime end,
                              CandleFormat candleFormat, Boolean includeFirst, Byte dailyAlignment,
                              WeeklyAlignment weeklyAlignment) throws Exception {
 
@@ -254,7 +254,7 @@ public class RateEndpoints extends Endpoint {
      * @return list of CandleMid
      * @throws Exception
      */
-    public Candle<CandleMid> GetCandlesMid(String instrument, GranularityType granularity, int count) throws Exception {
+    public Candle<CandleMid> GetCandlesMid(String instrument, GranularityType granularity, long count) throws Exception {
 
         Candle<CandleMid> candle = new Candle<>();
         String endpoint = makeEndpoint(accountType, candleRoute);
@@ -346,7 +346,7 @@ public class RateEndpoints extends Endpoint {
      * @return list of CandleBidAsk
      * @throws Exception
      */
-    public Candle<CandleBidAsk> GetCandlesBidAsk(String instrument, GranularityType granularity, int count) throws Exception {
+    public Candle<CandleBidAsk> GetCandlesBidAsk(String instrument, GranularityType granularity, long count) throws Exception {
 
         Candle<CandleBidAsk> candle = new Candle<>();
         String endpoint = makeEndpoint(accountType, candleRoute);
@@ -365,7 +365,7 @@ public class RateEndpoints extends Endpoint {
 
     }
 
-    private Map<String, Object> makeCandle(String instrument, GranularityType granularity, Integer count, DateTime start, DateTime end,
+    private Map<String, Object> makeCandle(String instrument, GranularityType granularity, Long count, DateTime start, DateTime end,
                                            CandleFormat candleFormat, Boolean includeFirst, Byte dailyAlignment,
                                            WeeklyAlignment weeklyAlignment) throws Exception {
 
@@ -381,7 +381,7 @@ public class RateEndpoints extends Endpoint {
         fields.put("granularity", granularity.toString());
 
         if (count == null)
-            count = 500;
+            count = 500L;
         fields.put("count", count);
 
         if (start != null) {

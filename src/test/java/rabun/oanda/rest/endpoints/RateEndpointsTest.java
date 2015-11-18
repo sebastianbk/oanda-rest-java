@@ -13,13 +13,13 @@ import static org.junit.Assert.*;
 public class RateEndpointsTest {
 
     public String key;
-    public int accountId;
+    public long accountId;
     public RateEndpoints rateEndpoints;
 
     @Before
     public void setUp() throws Exception {
-        accountId = 4905675;
-        key = "019042a97b42ae9e1c0501e46cdb80fd-efe1760c46bfb65901418e8107e78827";
+        accountId = 5517316;
+        key = "68845455388b640e79cb2a8da89db3a4-6aa7d276beb23ed544036b802a4bc1c7";
         rateEndpoints = new RateEndpoints(key, Endpoint.AccountType.practice);
     }
 
@@ -38,6 +38,7 @@ public class RateEndpointsTest {
     @Test
     public void testGetPrices() throws Exception {
         List<Price> prices = rateEndpoints.GetPrices("EUR_USD");
+        System.out.println(prices.get(0).bid);
         assertNotNull(prices);
         assertTrue(prices.size() > 0);
     }

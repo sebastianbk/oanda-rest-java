@@ -42,7 +42,7 @@ public class TradeEndpoints extends Endpoint {
      * @return list of trades
      * @throws UnirestException
      */
-    public List<Trade> GetTrades(int accountId, Integer maxId, Integer count, String instrument, String ids) throws UnirestException {
+    public List<Trade> GetTrades(long accountId, Long maxId, Long count, String instrument, String ids) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, tradesRoute);
 
@@ -76,7 +76,7 @@ public class TradeEndpoints extends Endpoint {
      * @return trade
      * @throws UnirestException
      */
-    public Trade GetTrade(int accountId, int tradeId) throws UnirestException {
+    public Trade GetTrade(long accountId, long tradeId) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, tradeRoute);
 
@@ -107,7 +107,7 @@ public class TradeEndpoints extends Endpoint {
      * @return trade
      * @throws UnirestException
      */
-    public Trade UpdateTrade(int accountId, int tradeId, Float stopLoss, Float takeProfit, Integer trailingStop) throws UnirestException {
+    public Trade UpdateTrade(long accountId, long tradeId, Float stopLoss, Float takeProfit, long trailingStop) throws UnirestException {
         String endpoint = makeEndpoint(accountType, tradeRoute);
 
         Map<String, String> routeParams = new HashMap<>();
@@ -136,7 +136,7 @@ public class TradeEndpoints extends Endpoint {
      * @return TradeClosed model
      * @throws UnirestException
      */
-    public TradeClosed CloseTrade(int accountId, int tradeId) throws UnirestException {
+    public TradeClosed CloseTrade(long accountId, long tradeId) throws UnirestException {
 
         String endpoint = makeEndpoint(accountType, tradeRoute);
 

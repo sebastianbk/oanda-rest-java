@@ -1,7 +1,7 @@
 package rabun.oanda.rest.models;
 
 public class OrderMarketIfTouched extends Order {
-    public int units;
+    public long units;
     public float takeProfit;
     public float stopLoss;
     public String expiry;

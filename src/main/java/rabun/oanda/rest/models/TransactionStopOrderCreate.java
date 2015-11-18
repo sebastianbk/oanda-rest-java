@@ -1,6 +1,6 @@
 package rabun.oanda.rest.models;
 
 public class TransactionStopOrderCreate extends TransactionSimple {
-    public int expiry;
+    public long expiry;
     public OandaTypes.Reason reason;
 }

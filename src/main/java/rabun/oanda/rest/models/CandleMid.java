@@ -6,6 +6,6 @@ public class CandleMid {
     public float highMid;
     public float lowMid;
     public float closeMid;
-    public int volume;
+    public long volume;
     public boolean complete;
 }
